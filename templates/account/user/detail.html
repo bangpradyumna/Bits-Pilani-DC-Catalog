@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ user.username }}</h1>
+    <p><strong>DC Username :</strong> {{ user_profile1.dc_username }} </p>
+    <p><strong>Bio :</strong>{{ user_profile1.something }}</p>
+    <br>
+    <strong>Movies by this user :</strong>
+    {% for user_movies in user.Profile.get_user_movies %}
+        <p>{{ user_movies.title }}</p>
+    {% endfor %}
+{% endblock %}

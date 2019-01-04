@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <table>
+        {% for user in users %}
+            <tr>
+                <td><a href="{% url 'user_detail' username=user.username %}"> {{ user.username }} </a></td>
+                <td><a href="{% url 'follow_user' username=user.username %}">Follow</a></td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

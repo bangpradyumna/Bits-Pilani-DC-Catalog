@@ -37,9 +37,13 @@ class Comment(models.Model):
     def __str__(self):
         return self.comment_text
 
+    def reply_to_this_comment(self):
+        return ReplyToComment.objects.all().filter(comment=self)
 
 # Reply to any comment
 class ReplyToComment(models.Model):
+    reply_to_comment_author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reply_to_comment',
+                                                default=None)
     comment = models.ForeignKey(Comment, on_delete=models.CASCADE, related_name='reply_to_comment')
     reply_text = models.TextField(default=None)
 

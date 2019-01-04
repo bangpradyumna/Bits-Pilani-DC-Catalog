@@ -12,7 +12,7 @@ from django.views.generic.edit import CreateView, FormMixin
 
 from blog.forms import CommentForm
 from .forms import UpdateProfileForm
-from .models import Movie, Anime, Book, Software, Profile, Comment
+from .models import Movie, Anime, Book, Software, Profile, Comment, ReplyToComment
 
 
 # Create your views here.
@@ -59,7 +59,7 @@ class SoftwareListView(generic.ListView):
     model = Software
 
 
-class MovieDetailView(generic.DetailView, FormMixin):
+class MovieDetailView(LoginRequiredMixin, generic.DetailView, FormMixin):
     model = Movie
     form_class = CommentForm
 
@@ -91,6 +91,39 @@ class MovieDetailView(generic.DetailView, FormMixin):
                                content_type=ContentType.objects.get_for_model(self.model),
                                comment_text=form.cleaned_data['comment'], object_id=stuff_pk)
         return super().form_valid(form)
+
+
+class MovieReplyToCommentView(LoginRequiredMixin, CreateView):
+    model = ReplyToComment
+    fields = ['reply_text']
+    success_url = None
+
+    def form_valid(self, form):
+        form.instance.reply_to_comment_author = self.request.user
+        form.instance.comment = Comment.objects.get(pk=self.kwargs['pk'])
+        # ctu=Movie.objects.get(pk=form.instance.comment.object_id)
+        # print("hello")
+        # print(type(ctu))
+        # self.success_url=Movie.objects.get(pk=form.instance.comment.object_id)
+        self.success_url = reverse('Movies-detail', kwargs={'pk': form.instance.comment.object_id})
+        return super().form_valid(form)
+
+
+def DeleteComment(request, pk):
+    this_comment = Comment.objects.get(pk=pk)
+    if this_comment.comment_author == request.user:
+        replies = ReplyToComment.objects.all().filter(comment=this_comment)
+        repd = replies.delete()
+        this_comment.delete()
+    # HttpResponseRedirect(reverse('Movies-detail',kwargs={'pk':this_comment.object_id}))
+
+
+def DeleteReplyToComment(request, pk):
+    this_reply = ReplyToComment.objects.get(pk=pk)
+    if this_reply.reply_to_comment_author == request.user:
+        this_reply.delete()
+    # HttpResponseRedirect(reverse('Movies-detail',kwargs={'pk':this_reply.comment.object_id}))
+
 
 
 class AnimeDetailView(generic.DetailView):

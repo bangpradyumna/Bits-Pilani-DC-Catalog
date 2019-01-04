@@ -31,8 +31,15 @@
 
         <h2>Comments : </h2>
         {% for each_comment in comments_for_post %}
+            <p>{{ each_comment.comment_author }} : {{ each_comment.comment_text }} <a
+                    href="{% url 'reply_to_comment' pk=each_comment.pk %}"> Reply to this comment</a> | <a
+                    href="{% url 'delete_comment' pk=each_comment.pk %}"> Delete comment</a></p>
 
-            <p>{{ each_comment.comment_author }} : {{ each_comment.comment_text }}</p>
+            <p>Replies to this comment :</p>
+            {% for each_reply in each_comment.reply_to_this_comment %}
+                <p>{{ each_reply.reply_to_comment_author.username }}: {{ each_reply.reply_text }} | <a
+                        href="{% url 'delete_reply_to_comment' pk=each_reply.pk %}"> Delete comment</a></p>
+            {% endfor %}
         {% endfor %}
     {% endblock %}
 {% endblock %}

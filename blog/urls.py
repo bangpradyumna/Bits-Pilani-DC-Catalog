@@ -1,6 +1,6 @@
 from django.urls import path
 
-from blog.views import MovieCreate, AnimeCreate, SoftwareCreate, BookCreate
+from blog.views import MovieCreate, AnimeCreate, SoftwareCreate, BookCreate, MovieReplyToCommentView
 from . import views
 
 urlpatterns = [
@@ -18,8 +18,11 @@ urlpatterns = [
     path('users/follow/<username>', views.follow, name='follow_user'),
     path('users/<username>/', views.user_detail, name='user_detail'),
     path('movies/create', MovieCreate.as_view(), name='create_movie'),
+    path('movies/reply_to_comment/<int:pk>', MovieReplyToCommentView.as_view(), name='reply_to_comment'),
     path('anime/create', AnimeCreate.as_view(), name='create_anime'),
     path('software/create', SoftwareCreate.as_view(), name='create_software'),
     path('books/create', BookCreate.as_view(), name='create_book'),
     path('users/update_profile', views.UpdateProfile, name='update_profile'),
+    path('comment/delete_comment/<int:pk>', views.DeleteComment, name='delete_comment'),
+    path('comment/delete_reply_to_comment/<int:pk>', views.DeleteReplyToComment, name='delete_reply_to_comment'),
 ]

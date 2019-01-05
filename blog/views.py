@@ -230,6 +230,7 @@ def follow(request, username):
     return render(request, 'users/follow/successfull.html')
 
 
+@login_required
 def UpdateProfile(request):
     if request.method == 'POST':
         form = UpdateProfileForm(request.POST)

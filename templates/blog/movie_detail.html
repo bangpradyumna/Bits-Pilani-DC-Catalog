@@ -10,6 +10,11 @@
     </a></p>
     <p><strong>Quality:</strong> {{ movie.movie_quality }}</p>
     <p><strong>Size:</strong> {{ movie.movie_size }}</p>
+    <p><a href="{% url 'delete_movie' pk=movie.id %}">Delete this movie!</a></p>
+
+
+    <br>
+    <br>
     {% if movie.cover_img_link != '' %}
         <img src="{{ movie.cover_img_link }}" alt="Movie Cover Image">
     {% endif %}

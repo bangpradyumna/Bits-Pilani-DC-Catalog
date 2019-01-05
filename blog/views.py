@@ -69,7 +69,9 @@ class MovieDetailView(LoginRequiredMixin, generic.DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.get_form()
-        comments_for_post = Comment.objects.all().filter(comment_author=self.request.user)
+        # context['pk']=self.object.pk
+        comments_for_post = Comment.objects.all().filter(content_type=ContentType.objects.get_for_model(self.model),
+                                                         object_id=self.object.pk)
         context['comments_for_post'] = comments_for_post
         return context
 
@@ -101,12 +103,35 @@ class MovieReplyToCommentView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.reply_to_comment_author = self.request.user
         form.instance.comment = Comment.objects.get(pk=self.kwargs['pk'])
-        # ctu=Movie.objects.get(pk=form.instance.comment.object_id)
-        # print("hello")
-        # print(type(ctu))
-        # self.success_url=Movie.objects.get(pk=form.instance.comment.object_id)
         self.success_url = reverse('Movies-detail', kwargs={'pk': form.instance.comment.object_id})
         return super().form_valid(form)
+
+
+def deleteMovie(request, pk):
+    this_movie = Movie.objects.get(pk=pk)
+    if this_movie.author == request.user:
+        this_movie.delete()
+
+
+def deleteAnime(request, pk):
+    this_anime = Anime.objects.get(pk=pk)
+    if this_anime.author == request.user:
+        this_anime.delete()
+
+
+def deleteBook(request, pk):
+    this_book = Book.objects.get(pk=pk)
+    if this_book.author == request.user:
+        this_book.delete()
+
+
+def deleteSoftware(request, pk):
+    this_software = Software.objects.get(pk=pk)
+    if this_software.author == request.user:
+        this_software.delete()
+
+
+
 
 
 def DeleteComment(request, pk):
@@ -123,7 +148,6 @@ def DeleteReplyToComment(request, pk):
     if this_reply.reply_to_comment_author == request.user:
         this_reply.delete()
     # HttpResponseRedirect(reverse('Movies-detail',kwargs={'pk':this_reply.comment.object_id}))
-
 
 
 class AnimeDetailView(generic.DetailView):

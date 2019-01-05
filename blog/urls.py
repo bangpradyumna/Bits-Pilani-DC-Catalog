@@ -25,4 +25,9 @@ urlpatterns = [
     path('users/update_profile', views.UpdateProfile, name='update_profile'),
     path('comment/delete_comment/<int:pk>', views.DeleteComment, name='delete_comment'),
     path('comment/delete_reply_to_comment/<int:pk>', views.DeleteReplyToComment, name='delete_reply_to_comment'),
+    path('movies/delete/<int:pk>', views.deleteMovie, name='delete_movie'),
+    path('anime/delete/<int:pk>', views.deleteAnime, name='delete_anime'),
+    path('software/delete/<int:pk>', views.deleteSoftware, name='delete_software'),
+    path('books/delete/<int:pk>', views.deleteBook, name='delete_book'),
+
 ]

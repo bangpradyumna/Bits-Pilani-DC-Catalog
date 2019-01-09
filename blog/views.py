@@ -8,6 +8,8 @@ from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, FormMixin
+from django.core.exceptions import PermissionDenied
+
 
 from blog.forms import CommentForm
 from .forms import UpdateProfileForm
@@ -68,7 +70,7 @@ class MovieDetailView(LoginRequiredMixin, generic.DetailView, FormMixin):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['form'] = self.get_form()
-        # context['pk']=self.object.pk
+        context['current_user'] = self.request.user
         comments_for_post = Comment.objects.all().filter(content_type=ContentType.objects.get_for_model(self.model),
                                                          object_id=self.object.pk)
         context['comments_for_post'] = comments_for_post
@@ -111,25 +113,32 @@ def deleteMovie(request, pk):
     print(request.META)
     if this_movie.author == request.user:
         this_movie.delete()
+    else:
+        raise PermissionDenied("You cannot delete this movie as you are not the author!")
 
 
 def deleteAnime(request, pk):
     this_anime = Anime.objects.get(pk=pk)
     if this_anime.author == request.user:
         this_anime.delete()
+    else:
+        raise PermissionDenied("You cannot delete this anime as you are not the author!")
 
 
 def deleteBook(request, pk):
     this_book = Book.objects.get(pk=pk)
     if this_book.author == request.user:
         this_book.delete()
+    else:
+        raise PermissionDenied("You cannot delete this book as you are not the author!")
 
 
 def deleteSoftware(request, pk):
     this_software = Software.objects.get(pk=pk)
     if this_software.author == request.user:
         this_software.delete()
-
+    else:
+        raise PermissionDenied("You cannot delete this software as you are not the author!")
 
 
 
@@ -139,6 +148,8 @@ def DeleteComment(request, pk):
         replies = ReplyToComment.objects.all().filter(comment=this_comment)
         repd = replies.delete()
         this_comment.delete()
+    else:
+        raise PermissionDenied("You cannot delete this comment as you are not the author!")
     # HttpResponseRedirect(reverse('Movies-detail',kwargs={'pk':this_comment.object_id}))
 
 
@@ -146,6 +157,8 @@ def DeleteReplyToComment(request, pk):
     this_reply = ReplyToComment.objects.get(pk=pk)
     if this_reply.reply_to_comment_author == request.user:
         this_reply.delete()
+    else:
+        raise PermissionDenied("You cannot delete this comment as you are not the author!")
     # HttpResponseRedirect(reverse('Movies-detail',kwargs={'pk':this_reply.comment.object_id}))
 
 

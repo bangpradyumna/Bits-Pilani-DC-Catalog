@@ -219,8 +219,10 @@ def register(request):
 @login_required
 def user_list(request):
     users = User.objects.exclude(username=request.user.username)
+    following = request.user.profile.following.all()
     context = {
-        'users': users
+        'users': users,
+        'following': following,
     }
     return render(request, 'account/user/list.html', context=context)
 

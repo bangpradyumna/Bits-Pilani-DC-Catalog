@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -109,6 +108,7 @@ class MovieReplyToCommentView(LoginRequiredMixin, CreateView):
 
 def deleteMovie(request, pk):
     this_movie = Movie.objects.get(pk=pk)
+    print(request.META)
     if this_movie.author == request.user:
         this_movie.delete()
 
@@ -129,7 +129,6 @@ def deleteSoftware(request, pk):
     this_software = Software.objects.get(pk=pk)
     if this_software.author == request.user:
         this_software.delete()
-
 
 
 
@@ -205,18 +204,16 @@ class BookCreate(LoginRequiredMixin, CreateView):
 
 
 # registration views
-def register(request):  # not working
+def register(request):
     if request.method == 'POST':
-        f = UserCreationForm()
-        if f.is_valid():
-            f.save()
-            messages.success(request, 'Account created Successfully')
-            return HttpResponseRedirect('Movies')
-
+        form = UserCreationForm(request.POST)
+        if form.is_valid:
+            user = form.save()
+            return HttpResponseRedirect(reverse('index  '))
     else:
-        f = UserCreationForm()
+        form = UserCreationForm()
 
-    return render(request, 'registration/signup.html', {'form': f})
+    return render(request, 'registration/signup.html', {'form': form})
 
 
 @login_required

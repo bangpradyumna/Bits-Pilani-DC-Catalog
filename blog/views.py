@@ -3,13 +3,12 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, FormMixin
-from django.core.exceptions import PermissionDenied
-
 
 from blog.forms import CommentForm
 from .forms import UpdateProfileForm
@@ -113,6 +112,7 @@ def deleteMovie(request, pk):
     print(request.META)
     if this_movie.author == request.user:
         this_movie.delete()
+
     else:
         raise PermissionDenied("You cannot delete this movie as you are not the author!")
 

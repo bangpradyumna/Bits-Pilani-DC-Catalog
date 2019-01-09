@@ -2,7 +2,8 @@
 {% block content %}
     <h1>{{ movie.title }}</h1>
 
-    <p><strong>Author:</strong> <a href="">{{ movie.author }}</a></p>
+    <p><strong>Author:</strong> <a href="{% url 'user_detail' username=movie.author.username %}"> {{ movie.author }}</a>
+    </p>
     <p><strong>Genre:</strong> <a href="">
         {% for genre in movie.movie_genre.all %}
             {{ genre.genre_name }} ,

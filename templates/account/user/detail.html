@@ -6,7 +6,7 @@
     <p><strong>Bio :</strong>{{ user_profile1.something }}</p>
     <br>
     <strong>Movies by this user :</strong>
-    {% for user_movies in user.Profile.get_user_movies %}
-        <p>{{ user_movies.title }}</p>
+    {% for user_movies in user.profile.get_user_movies %}
+        <p><a href="{% url 'Movies-detail' pk=user_movies.pk %}"> {{ user_movies.title }} </a></p>
     {% endfor %}
 {% endblock %}

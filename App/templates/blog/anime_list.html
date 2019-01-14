@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> Anime List </h1>
+
+    {% if anime_list %}
+
+        <ul>
+            {% for anime in anime_list %}
+                <li>
+                    <a href="{{ anime.get_absolute_url }}"> {{ anime.title }} </a> ({{ anime.author }})
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p> There are no anime to show. <a href="{% url 'create_anime' %}">Click here</a> to create one.</p>
+    {% endif %}
+{% endblock %}

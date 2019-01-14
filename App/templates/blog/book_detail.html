@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>Title: {{ book.title }}</h1>
+    <p><strong>Author:</strong> <a href="">{{ book.book_author }}</a></p> <!-- author detail link not yet defined -->
+    {% if movie.cover_img_link != '' %}
+        <img src="{{ book.cover_img_link }}" alt="{{ book.title }}"/>
+
+    {% endif %}
+
+
+{% endblock %}

@@ -1,0 +1,10 @@
+[0;1;32m●[0m mysql.service - MySQL Community Server
+   Loaded: loaded (/lib/systemd/system/mysql.service; enabled; vendor preset: enabled)
+   Active: [0;1;32mactive (running)[0m since Thu 2019-01-10 20:17:04 IST; 1min 38s ago
+ Main PID: 9560 (mysqld)
+    Tasks: 27 (limit: 4244)
+   CGroup: /system.slice/mysql.service
+           └─9560 /usr/sbin/mysqld --daemonize --pid-file=/run/mysqld/mysqld.pid
+
+Jan 10 20:16:59 theweblover007-Lenovo-Ideapad-Flex-14 systemd[1]: Starting MySQL Community Server...
+Jan 10 20:17:04 theweblover007-Lenovo-Ideapad-Flex-14 systemd[1]: Started MySQL Community Server.

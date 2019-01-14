@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1> Software List </h1>
+
+    {% if software_list %}
+
+        <ul>
+            {% for software in software_list %}
+                <li>
+                    <a href="{{ software.get_absolute_url }}"> {{ software.title }} </a> ({{ software.author }})
+                </li>
+            {% endfor %}
+        </ul>
+
+    {% else %}
+        <p> There are no softwares to show. <a href="{% url 'create_software' %}">Click here</a> to create one.</p>
+    {% endif %}
+{% endblock %}

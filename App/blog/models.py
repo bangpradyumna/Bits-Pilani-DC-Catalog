@@ -128,4 +128,4 @@ class Profile(models.Model):
         return Movie.objects.all().filter(author=self.user)
 
     def get_absolute_url(self):
-        return reverse('user_detail', args=[self.user.username])
+        return reverse('user_detail', kwargs={'username': self.user.username}

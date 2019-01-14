@@ -109,7 +109,10 @@ venv.bak/
 .idea/workspace.xml
 /Winter/etc/SECRET_KEY.TXT
 /venv/
+/.idea/
 /blog/migrations/
 /db.sqlite3
 /App/Winter/etc/
 /App/blog/migrations/
+/.idea/misc.xml
+/.idea/Winter.iml

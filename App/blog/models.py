@@ -119,7 +119,7 @@ class Profile(models.Model):
     followers = models.ManyToManyField('self', symmetrical=False, related_name='following')
     dc_username = models.CharField(max_length=40, default=None, blank=True, null=True)
     something = models.TextField(max_length=500, default=None, blank=True, null=True)
-    profile_picture = models.ImageField(upload_to='images/', blank=True)
+    profile_picture = models.ImageField(upload_to='images/', blank=True, default=None)
 
     def __str__(self):
         return self.user.username
@@ -128,4 +128,4 @@ class Profile(models.Model):
         return Movie.objects.all().filter(author=self.user)
 
     def get_absolute_url(self):
-        return reverse('user_detail', kwargs={'username': self.user.username}
+        return reverse('user_detail', kwargs={'username': self.user.username})

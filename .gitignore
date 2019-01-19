@@ -116,3 +116,5 @@ venv.bak/
 /App/blog/migrations/
 /.idea/misc.xml
 /.idea/Winter.iml
+/.env/
+/.env

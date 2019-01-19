@@ -1,17 +1,17 @@
 from blog.forms import CommentForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
+from django.core.mail import EmailMultiAlternatives
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, FormMixin
 
-from .forms import UpdateProfileForm
+from .forms import UpdateProfileForm, UserCreationForm
 from .models import Movie, Anime, Book, Software, Profile, Comment, ReplyToComment
 
 
@@ -182,6 +182,20 @@ class MovieCreate(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+        current_user = self.request.user
+        for follower in current_user.profile.followers.all():
+            if follower.user.email != '':
+                user_email = follower.user.email
+                mail = EmailMultiAlternatives(
+                    subject="The user you follow has created a post on DC++ catalog.",
+                    body="The user that you are following has created a post on Bits Pilani DC++ catalog. ",
+                    from_email="Pradyumna Bang <theweblover007@gmail.com",
+                    to=[user_email],
+                    headers={"Reply-To": "theweblover007@gmail.com"}
+                )
+                mail.send()
+
+
         return super().form_valid(form)
 
 
@@ -275,6 +289,7 @@ def UpdateProfile(request):
             new_profile.dc_username = form.cleaned_data['dc_username']
             new_profile.something = form.cleaned_data['something']
             new_profile.profile_picture = form.cleaned_data['profile_picture']
+            request.user.email = form.cleaned_data['user_email']
             # HttpResponseRedirect(reverse(user_detail, args=[request.user.username]))
             new_profile.save()
     else:

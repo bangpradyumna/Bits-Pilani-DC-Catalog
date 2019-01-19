@@ -5,11 +5,13 @@ from django.contrib.auth.models import User
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import PermissionDenied
 from django.core.mail import EmailMultiAlternatives
+from django.http import HttpResponse
 from django.http import HttpResponseRedirect, HttpResponseForbidden
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse
 from django.views import generic
 from django.views.generic.edit import CreateView, FormMixin
+from openpyxl import Workbook
 
 from .forms import UpdateProfileForm, UserCreationForm
 from .models import Movie, Anime, Book, Software, Profile, Comment, ReplyToComment
@@ -296,3 +298,18 @@ def UpdateProfile(request):
         form = UpdateProfileForm()
 
     return render(request, 'users/update_profile.html', {'form': form})
+
+
+def generate_user_data(request):
+    if request.user.is_superuser:
+        wb = Workbook(write_only=True)
+        ws = wb.create_sheet()
+        for each_user in User.objects.all():
+            line = [each_user.username, each_user.email]
+            ws.append(line)
+        response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+        response['Content-Disposition'] = 'attachment; filename=mydata.xlsx'
+        wb.save(response)
+        return response
+    else:
+        return HttpResponseForbidden()

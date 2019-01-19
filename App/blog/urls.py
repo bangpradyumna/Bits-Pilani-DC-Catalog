@@ -15,6 +15,7 @@ urlpatterns = [
     path('software/<int:pk>', views.SoftwareDetailView.as_view(), name='Software-detail'),
     path('register/', views.register, name='register'),
     path('users/', views.user_list, name='user_list'),
+    path('users/generateuserdata', views.generate_user_data, name='generate_user_data'),
     path('users/follow/<username>', views.follow, name='follow_user'),
     path('users/<username>/', views.user_detail, name='user_detail'),
     path('movies/create', MovieCreate.as_view(), name='create_movie'),
